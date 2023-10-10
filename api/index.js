@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import userRouter from "./routes/userRoute.js";
+import authRouter from "./routes/authRoute.js";
 
-const app = express();
 dotenv.config();
+const app = express();
 
 const MONGO_URL = process.env.MONGO_URL;
-
 mongoose
 	.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => {
@@ -18,12 +18,11 @@ mongoose
 		console.error("Error connecting to MongoDB:", error);
 	});
 
-app.get("/", (req, res) => {
-	res.send("Hello");
-});
+app.use(express.json());
 
 app.listen(3000, () => {
 	console.log("Server running on port 3000");
 });
 
 app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
